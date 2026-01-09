@@ -5,7 +5,7 @@ import joblib
 
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
-from sklearn.linear_model import Ridge
+from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error, r2_score
 
 os.makedirs("outputs/model", exist_ok=True)
@@ -17,15 +17,14 @@ X = df.drop("quality", axis=1)
 y = df["quality"]
 
 X_train, X_test, y_train, y_test = train_test_split(
-    X, y, test_size=0.3, random_state=42
+    X, y, test_size=0.2, random_state=42
 )
 
 scaler = StandardScaler()
-X_train = X_train.values
-X_test = X_test.values
+X_train = scaler.fit_transform(X_train)
+X_test = scaler.transform(X_test)
 
-
-model = Ridge(alpha=0.1)
+model = LinearRegression()
 model.fit(X_train, y_train)
 
 y_pred = model.predict(X_test)
